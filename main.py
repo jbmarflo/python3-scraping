@@ -11,7 +11,10 @@ soup = BeautifulSoup(page.content, 'html.parser')
 list_data = soup.find_all('tr')
 
 for data in list_data:
-    print(data.get_text().encode('utf-8'), '\n')
+    td_list = data.find_all('td')
+    for td_data in td_list:
+    	print(td_data.get_text().encode('utf-8'))
+    print('\n')
 #artist_name_list = soup.find(class_='BodyText')
 #artist_name_list_items = artist_name_list.find_all('a')
 #
