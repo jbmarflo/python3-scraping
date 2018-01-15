@@ -1,4 +1,5 @@
 import requests
+import uuid
 import pymysql.cursors
 from bs4 import BeautifulSoup
 from urllib import request, parse
@@ -12,7 +13,7 @@ class Server:
                                          charset='utf8',
                                          cursorclass=pymysql.cursors.DictCursor)
 
-    def insert(query):
+    def insert(self, query):
             with self.connection.cursor() as cursor:
                 # Create a new record
 #                sql = "INSERT INTO `users` (`email`, `password`) VALUES (%s, %s)"
@@ -20,8 +21,14 @@ class Server:
                 cursor.execute(sql, ('webmaster@python.org', 'very-secret'))
             self.connection.commit()
         
-    def close():
-        self.connection.close()
+    def close(self):
+        try:
+            self.connection.close()
+        except IndexError:
+            print('No se puedo cerrar coneccion')
+
+def slugMaker(str):
+    return str
 
 def scraping(pageContent):
     soup = BeautifulSoup(pageContent, 'html.parser')
@@ -33,9 +40,12 @@ def scraping(pageContent):
         try:
             datos[int(td_list[0].get_text().encode('utf-8'))] = {
                 'codigo': int(td_list[0].get_text().encode('utf-8')),
+                'id': uuid.uuid4(),
                 'institucion': td_list[1].get_text().encode('utf-8'),
+                'institucionSlug': td_list[1].get_text().encode('utf-8'),
                 'grado': td_list[2].get_text().encode('utf-8'),
-                'carrera': td_list[3].get_text().encode('utf-8')
+                'carrera': td_list[3].get_text().encode('utf-8'),
+                'carreraSlug': td_list[3].get_text().encode('utf-8')
         }
         except IndexError:
             print('error en el primer index: ', i)
@@ -54,12 +64,12 @@ def requestPage():
         data = scraping(webPage.content)
         for row in data:
             try:
-#                server.insert('')
-                print(data[row]['codigo'], ' -> subio', '\n')
+#                server.insert("INSERT INTO `users` (`email`, `password`) VALUES (%s, %s)")
+                print(data[row]['id'],' -> subio', '\n')
             except IndexError:
                 print(data[row]['codigo'], ' -> error', '\n')
         page += 1
-    
+    server.close()
     return 0
 
 requestPage()
