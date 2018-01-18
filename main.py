@@ -26,9 +26,21 @@ class Server:
             self.connection.close()
         except IndexError:
             print('No se puedo cerrar coneccion')
-
-def slugMaker(str):
-    return str
+class Util:
+    @staticmethod
+    def slug(text):
+        string = (text.lower()
+                  .replace(' ', '-').replace(',', '-').replace('á', 'a')
+                  .replace('é', 'e').replace('í', 'i').replace('ó', 'o')
+                  .replace('ú', 'u').replace('ñ', 'n').replace('/', '-')
+                  .replace('¨', '').replace('º', '').replace('~', '')
+                  .replace('!', '').replace('(', '').replace(')', '')
+                  .replace('?', '').replace('¿', '').replace(';', '-')
+                  .replace('+', '-').replace('=', '-').replace('_', '-')
+                  .replace('"', '').replace('|', '-').replace('\\', '-')
+                  .replace('ü', 'u').replace('õ', 'o')
+                  ) #áéíóú ñ
+        return string
 
 def scraping(pageContent):
     soup = BeautifulSoup(pageContent, 'html.parser')
@@ -42,16 +54,14 @@ def scraping(pageContent):
                 'codigo': int(td_list[0].get_text().encode('utf-8')),
                 'id': uuid.uuid4(),
                 'institucion': td_list[1].get_text().encode('utf-8'),
-                'institucionSlug': td_list[1].get_text().encode('utf-8'),
+                'institucionSlug': Util.slug(td_list[1].get_text()),
                 'grado': td_list[2].get_text().encode('utf-8'),
                 'carrera': td_list[3].get_text().encode('utf-8'),
-                'carreraSlug': td_list[3].get_text().encode('utf-8')
+                'carreraSlug': Util.slug(td_list[3].get_text())
         }
         except IndexError:
             print('error en el primer index: ', i)
     return datos
-
-
 
 def requestPage():
     maxValPage = 2 #Tienen 599 paginas
@@ -64,8 +74,9 @@ def requestPage():
         data = scraping(webPage.content)
         for row in data:
             try:
+                # co
 #                server.insert("INSERT INTO `users` (`email`, `password`) VALUES (%s, %s)")
-                print(data[row]['id'],' -> subio', '\n')
+                print('Codigo: ',data[row]['codigo'],' -> subio', '\n')
             except IndexError:
                 print(data[row]['codigo'], ' -> error', '\n')
         page += 1
