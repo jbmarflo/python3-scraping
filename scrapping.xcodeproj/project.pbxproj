@@ -8,12 +8,14 @@
 
 /* Begin PBXFileReference section */
 		BE0DCB8120084655009250FE /* main.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = main.py; sourceTree = "<group>"; };
+		BE0DCB822015140F009250FE /* server.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = server.py; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
 		BE0DCB69200843DB009250FE = {
 			isa = PBXGroup;
 			children = (
+				BE0DCB822015140F009250FE /* server.py */,
 				BE0DCB8120084655009250FE /* main.py */,
 			);
 			sourceTree = "<group>";
