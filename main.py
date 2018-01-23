@@ -1,7 +1,6 @@
 import requests
 import uuid
 import pymysql.cursors
-import boto3
 from bs4 import BeautifulSoup
 from urllib import request, parse
 # pip install PyMySQL
